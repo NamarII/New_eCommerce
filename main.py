@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from validator import val 
-from producto import Producto
+#from producto import Producto
 from usuario import Usuario
 from compras import Compras
-from dataclasses import asdict
+#from dataclasses import asdict
 from db import dba
-import mysql.connector
-
+import sys
+    
+    
 def menu_app():
     print("Bienvenido a la aplicacion ")
     print("-------------------------- \n")
-    print("Eliga las siguientes opciones \n")
-    opcion=int(input(" Opcion 1: Registracion  \n Opcion 2: Iniciar Sesion \n Opcion 3: Salir de la aplicacion \n"))
+    
+    opcion=int(input("Elija las siguientes opciones \n Opcion 1: Registracion  \n Opcion 2: Iniciar Sesion \n Opcion 3: Salir de la aplicacion \n"))
     if opcion==1:
        #usuario=registracion_usuario()
         print("Bienvenido a la registracion del usuario")
@@ -26,7 +27,7 @@ def menu_app():
     elif opcion == 2:
         login()
     else:
-        quit()
+        sys.exit()
 
 def registracion_usuario():
     #i=False
@@ -63,15 +64,25 @@ def login():
 
     login['mail']=input('ingrese su mail: ')
     login['password']=input('ingrese su password: ')
+    result = val.validar_login(login)
     if val.validar_login(login)==login['password']:
-        print('Se ha logueado correctamente')
-        print('****************************\n')
+       print('Se ha logueado correctamente')
+       print('****************************\n')
+       menu_usuario()
         #registracion_usuario()
+        
     else:
-        print('Contraseña incorrecta')
-        print('*********************\n')
-    print(val.validar_login(login))
-
+       print('Contraseña incorrecta')
+    #    print('*********************\n')
+    #print(val.validar_login(login))
+    #if type(result)==tuple:
+        #print("El usuario se logeo correctamente.")
+        #usuario1= Usuario(result[1],result[2],result[3])
+        #usuario1.set_id(result[0])
+        #return menu_usuario(usuario1)
+    #else: 
+        #print(result)
+        
 def menu_usuario(usuario1):
     print(' Elija entre las siguientes opciones. \n')
     print('1: Modificar datos de usuario.')
@@ -132,7 +143,7 @@ def menu_usuario(usuario1):
             menu_app()
     
     elif opcion == 2:
-        dba.get_cursor().execute('select * from productos')
+        dba.get_cursor().execute('select * from producto')
         dba.get_conexion().commit
         result = dba.get_cursor().fetchall()
         for x in result:
@@ -157,6 +168,7 @@ def menu_usuario(usuario1):
         menu_usuario(usuario1)
     
 menu_app()        
+            
     
 
 
